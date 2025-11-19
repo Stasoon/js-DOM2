@@ -12,5 +12,13 @@
     "http-server": "^14.1.1",
     "live-server": "^1.2.2"
   },
-  "description": ""
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stasoon/js-DOM2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Stasoon/js-DOM2/issues"
+  },
+  "homepage": "https://github.com/Stasoon/js-DOM2#readme"
 }

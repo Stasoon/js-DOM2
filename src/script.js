@@ -1,3 +1,12 @@
+import { loadImages } from "./api.js";
+import {
+    renderImages,
+    clearGallery,
+    removeLastImage,
+    reverseGallery,
+    shuffleGallery
+} from "./gallery.js";
+
 const gallery = document.getElementById("gallery");
 const loadMoreBtn = document.getElementById("loadMore");
 const clearBtn = document.getElementById("clearGallery");
@@ -5,53 +14,23 @@ const removeLastBtn = document.getElementById("removeLast");
 const reverseBtn = document.getElementById("reverseGallery");
 const shuffleBtn = document.getElementById("shuffleGallery");
 
-let page = 1;
+// ---- кнопки ----
 
-// ---- Функція запиту картинок ----
-async function loadImages(count = 5) {
-    const response = await fetch(`https://picsum.photos/v2/list?page=${page}&limit=${count}`);
-    const data = await response.json();
-    page++; // наступна сторінка
-
-    data.forEach(imgObj => {
-        const img = document.createElement("img");
-        img.src = imgObj.download_url;
-        img.alt = "photo";
-        gallery.appendChild(img);
-    });
-}
-
-// ---- Кнопки ----
-
-// загрузити ще
-loadMoreBtn.addEventListener("click", () => loadImages());
-
-// очистити
-clearBtn.addEventListener("click", () => {
-    gallery.innerHTML = "";
+loadMoreBtn.addEventListener("click", async () => {
+    const images = await loadImages();
+    renderImages(gallery, images);
 });
 
-// видалити останню
-removeLastBtn.addEventListener("click", () => {
-    const items = gallery.querySelectorAll("img");
-    if (items.length > 0) items[items.length - 1].remove();
-});
+clearBtn.addEventListener("click", () => clearGallery(gallery));
 
-// перевернути галерею
-reverseBtn.addEventListener("click", () => {
-    const items = Array.from(gallery.children);
-    gallery.innerHTML = "";
-    items.reverse().forEach(i => gallery.appendChild(i));
-});
+removeLastBtn.addEventListener("click", () => removeLastImage(gallery));
 
-// перемішати
-shuffleBtn.addEventListener("click", () => {
-    const items = Array.from(gallery.children);
-    gallery.innerHTML = "";
-    items.sort(() => Math.random() - 0.5);
-    items.forEach(i => gallery.appendChild(i));
-});
+reverseBtn.addEventListener("click", () => reverseGallery(gallery));
 
-// ---- При першому завантаженні ----
-loadImages();
+shuffleBtn.addEventListener("click", () => shuffleGallery(gallery));
 
+// ---- старт ----
+(async () => {
+    const images = await loadImages();
+    renderImages(gallery, images);
+})();
